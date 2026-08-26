@@ -31,6 +31,7 @@ env/
 .coverage
 htmlcov/
 .mypy_cache/
+test.db
 
 # Docker
 docker-compose.override.yml

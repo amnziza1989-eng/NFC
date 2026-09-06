@@ -1,0 +1,43 @@
+services:
+  app:
+    build: .
+    ports:
+      - "${HOST_PORT:-8300}:8000"
+    environment:
+      - APP_ENV=development
+      - APP_HOST=0.0.0.0
+      - APP_PORT=8000
+      - DATABASE_URL=postgresql+asyncpg://nfc_user:nfc_password@db:5432/nfc_db
+      - PUBLIC_BASE_URL=http://localhost:${HOST_PORT:-8300}
+      - LOG_LEVEL=INFO
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=nfc_user
+      - POSTGRES_PASSWORD=nfc_password
+      - POSTGRES_DB=nfc_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nfc_user -d nfc_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    # Not exposing port 5432 to host — app connects via Docker network
+    # Uncomment for local development if needed:
+    # ports:
+    #   - "5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    # Internal to Docker network, no ports exposed to host.
+
+volumes:
+  postgres_data:

@@ -12,3 +12,15 @@ pydantic-settings==2.7.1
 
 # Utilities
 python-multipart==0.0.20
+
+# Rate Limiting & Cache
+slowapi==0.1.9
+redis==5.2.1
+
+# QR Generation
+qrcode[pil]==7.4.2
+pillow==11.1.0
+
+# Authentication
+PyJWT==2.10.1
+passlib[bcrypt]==1.7.4

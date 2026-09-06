@@ -11,7 +11,8 @@ from alembic import context
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from app.db.database import Base
-from app.models.models import Business, Card, Destination, Event  # noqa: F401
+from app.models.models import Business, Card, Destination, Event, ShopOrder, ShopOrderItem, Order  # noqa: F401
+from app.models.identity import CustomerIdentity, IdentityMethod, OtpSession  # noqa: F401
 
 # Alembic Config object
 config = context.config

@@ -18,15 +18,35 @@ class Settings(BaseSettings):
     # Public base URL for NFC/QR URL generation
     PUBLIC_BASE_URL: str = "https://tap.example.com"
 
+    # Security
+    API_KEY: str | None = None  # None disables management endpoints if not set
+    SECRET_KEY: str = "super-secret-default-key-change-in-prod"
+
+    # Redis (Rate limiting)
+    REDIS_URL: str = "redis://redis:6379/0"
+
     # Logging
     LOG_LEVEL: str = "INFO"
+
+    # Shipping & Tracking
+    POST_TRACKING_BASE_URL: str = "https://tracking.post.ir/?traking_code="
+
+    # SMS & Notifications
+    SMS_PROVIDER: str = "mock"
+    SMS_API_KEY: str | None = None
+    SMS_SENDER: str | None = None
+    SMS_TEMPLATE_ID: str | None = None
 
     @property
     def database_url_sync(self) -> str:
         """Sync database URL for Alembic migrations."""
         return self.DATABASE_URL.replace("+asyncpg", "+psycopg2")
 
-    model_config = {"env_file": ".env", "env_file_encoding": "utf-8"}
+    model_config = {
+        "env_file": ".env",
+        "env_file_encoding": "utf-8",
+        "extra": "ignore"
+    }
 
 
 @lru_cache
